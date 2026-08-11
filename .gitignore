@@ -1,0 +1,8 @@
+dist/
+site/
+__pycache__/
+server.js
+*.log
+miffy-contact-sheet.jpg
+audio/xuyue.flac
+audio/april-encounter.flac

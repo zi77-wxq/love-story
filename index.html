@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>写给你的故事</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="password-gate" id="passwordGate">
+    <form class="password-panel" id="passwordForm">
+      <img src="assets/miffy/miffy-runner.jpg" alt="米菲">
+      <h1>写给你的故事</h1>
+      <p>请输入我们的专属密码</p>
+      <input id="sitePassword" type="password" autocomplete="current-password" placeholder="请输入密码" aria-label="网站密码" required>
+      <button type="submit">打开故事</button>
+      <small id="passwordError" aria-live="polite"></small>
+    </form>
+  </div>
+  <header class="chrome">
+    <button class="back-tab" id="backBtn" aria-label="返回上一页">← <span>上一页</span></button>
+    <div class="progress-field"><input class="progress" id="pageProgress" type="range" min="0" max="15" value="0" step="1" aria-label="拖动米菲跳转页面"><span class="progress-runner" aria-hidden="true"></span></div>
+    <span class="chapter-count">00 / 12</span>
+    <button class="music-btn" id="musicBtn" aria-label="播放音乐"><span class="music-icon">♪</span><span id="musicLabel">播放音乐</span></button>
+  </header>
+
+  <main class="app-shell">
+    <section class="screen cover active theme-cover" data-screen="cover">
+      <div class="cover-copy"><span class="eyebrow">A STORY ABOUT US</span><h1>有一些话，<br>想慢慢说给 <em>你</em> 听。</h1><p>这里装着我们遇见、靠近和一起走过的地方。<br>也装着那些当时没来得及认真说出口的心意。</p><small>从米菲的小手开始，翻开我们的故事。</small></div>
+      <div class="interaction interaction-highfive" data-action="highfive"><img src="assets/miffy/WeChat｜米菲头像_16_困死我啦_来自小红书网页版.jpg" alt="封面上的米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手翻开故事"><span>翻开故事</span></button><i class="tap-ring"></i></div>
+    </section>
+
+    <section class="screen welcome theme-yellow" data-screen="0">
+      <div class="copy-block"><span class="eyebrow">A LITTLE STORY FOR YOU</span><h1>写给 <em>你</em><br>和我们的故事</h1><p>从第一次遇见，到想和你一直走下去。</p></div>
+      <div class="interaction interaction-heart" data-action="heart">
+        <img src="assets/miffy/米菲兔_2_小芋泥_来自小红书网页版.jpg" alt="抱着爱心的米菲">
+        <button class="hand-hotspot" data-next aria-label="点击米菲的小手，点亮爱心"><span>点这里</span></button>
+        <div class="heart-particles" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="screen story theme-blue" data-screen="1" data-media-page="2">
+      <div class="copy-block"><span class="eyebrow">CHAPTER 01 · 初见</span><h2>那天遇见你，<br><em>我记得很清楚。</em></h2><p>【在这里写下你们第一次见面的场景】<br><br>那时的我还不知道，后来你会成为我生命里这么重要的人。</p></div>
+      <div class="interaction interaction-highfive" data-action="highfive"><img src="assets/miffy/₍ᐢ. ₓ .ᐢ₎𝐌𝐢𝐟𝐟𝐲_10_Euphie💫_来自小红书网页版.jpg" alt="伸出手的米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手击掌"><span>击掌</span></button><i class="tap-ring"></i></div>
+    </section>
+
+    <section class="screen story theme-green" data-screen="2">
+      <div class="copy-block"><span class="eyebrow">CHAPTER 02 · 靠近</span><h2>从认识开始，<br><em>我们一点点变熟。</em></h2><p>【写下你们相处、聊天、约见的片段】<br><br>我们从“你好”变成了自然地分享每一天。</p></div>
+      <div class="interaction interaction-balloon" data-action="balloon"><img src="assets/miffy/₍ᐢ. ₓ .ᐢ₎𝐌𝐢𝐟𝐟𝐲_3_Euphie💫_来自小红书网页版.jpg" alt="手里牵着气球的米菲"><button class="hand-hotspot" data-next aria-label="点击米菲牵气球的小手"><span>松开小手</span></button><i class="balloon-float"></i></div>
+    </section>
+
+    <section class="screen story theme-pink" data-screen="3">
+      <div class="copy-block"><span class="eyebrow">CHAPTER 03 · 你给的光</span><h2>那段迷茫的日子，<br><em>谢谢你拉了我一把。</em></h2><p>你给我的那句鼓励，对我而言像一束光。<br><br>【填入她当时说的话】</p></div>
+      <div class="interaction interaction-heart" data-action="heart"><img src="assets/miffy/米菲兔_3_小芋泥_来自小红书网页版.jpg" alt="捧着爱心的米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手释放爱心"><span>释放爱心</span></button><div class="heart-particles" aria-hidden="true"></div></div>
+    </section>
+
+    <section class="screen story theme-orange" data-screen="4" data-media-page="5">
+      <div class="copy-block"><span class="eyebrow">CHAPTER 04 · 心动夏天</span><h2>毕业后的那个夏天，<br><em>每一个瞬间都在心动。</em></h2><p>【写下暑假里暧昧、甜甜的互动】<br><br>风很轻，天气很热，而喜欢你的心情藏也藏不住。</p></div>
+      <div class="interaction interaction-highfive" data-action="highfive"><img src="assets/miffy/₍ᐢ. ₓ .ᐢ₎𝐌𝐢𝐟𝐟𝐲_12_Euphie💫_来自小红书网页版.jpg" alt="向前伸手的米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手进入旅行"><span>一起出发</span></button><i class="tap-ring"></i></div>
+    </section>
+
+    <section class="screen trip theme-suzhou-nanjing" data-screen="5" data-place="苏州－南京" data-photo-count="6" data-media-page="6">
+      <div class="trip-head"><span class="eyebrow">OUR JOURNEY · 01</span><h2><em>苏州－南京</em><br>我们第一次出门玩</h2><p>第一次一起去远一点的地方，从苏州的水巷走到南京的梧桐树下。</p></div>
+      <div class="photo-stream"></div>
+      <div class="interaction compact interaction-balloon" data-action="balloon"><img src="assets/miffy/米菲兔_8_小芋泥_来自小红书网页版.jpg" alt="米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手继续"><span>继续旅行</span></button><i class="balloon-float"></i></div>
+    </section>
+
+    <section class="screen trip theme-hangzhou" data-screen="6" data-media-page="7" data-place="杭州 · 第一次"><div class="trip-head"><span class="eyebrow">OUR JOURNEY · 02</span><h2>我们一起去 <em>杭州</em></h2><p>第一次，把西湖边的风也写进故事。</p></div><div class="photo-stream"></div><div class="interaction compact interaction-heart" data-action="heart"><img src="assets/miffy/米菲兔_6_小芋泥_来自小红书网页版.jpg" alt="米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手继续"><span>收藏这天</span></button><div class="heart-particles"></div></div></section>
+
+    <section class="screen trip theme-home" data-screen="7" data-media-page="8" data-place="老家"><div class="trip-head"><span class="eyebrow">OUR JOURNEY · 03</span><h2>我们一起在 <em>老家</em></h2><p>最熟悉的地方，因为有你变得不一样。</p></div><div class="photo-stream"></div><div class="interaction compact interaction-highfive" data-action="highfive"><img src="assets/miffy/米菲兔_7_小芋泥_来自小红书网页版.jpg" alt="米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手继续"><span>一起向前</span></button><i class="tap-ring"></i></div></section>
+
+    <section class="screen trip theme-qingdao" data-screen="8" data-media-page="9" data-place="青岛"><div class="trip-head"><span class="eyebrow">OUR JOURNEY · 04</span><h2>我们一起去 <em>青岛</em></h2><p>海风、浪花，还有靠得很近的我们。</p></div><div class="photo-stream"></div><div class="interaction compact interaction-balloon" data-action="balloon"><img src="assets/miffy/米菲兔_9_小芋泥_来自小红书网页版.jpg" alt="米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手继续"><span>放飞气球</span></button><i class="balloon-float"></i></div></section>
+
+    <section class="screen trip theme-suzhou-two" data-screen="9" data-media-page="10" data-place="苏州 · 第二次"><div class="trip-head"><span class="eyebrow">OUR JOURNEY · 05</span><h2>我们又一起去 <em>苏州</em></h2><p>再走一次熟悉的水巷，还是会因为和你一起而开心。</p></div><div class="photo-stream"></div><div class="interaction compact interaction-heart" data-action="heart"><img src="assets/miffy/米菲兔_8_小芋泥_来自小红书网页版.jpg" alt="米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手继续"><span>收藏这天</span></button><div class="heart-particles"></div></div></section>
+    <section class="screen trip theme-hangzhou-two" data-screen="10" data-media-page="11" data-place="杭州 · 第二次"><div class="trip-head"><span class="eyebrow">OUR JOURNEY · 06</span><h2>我们又一起去 <em>杭州</em></h2><p>同一座城，又多了一段新的回忆。</p></div><div class="photo-stream"></div><div class="interaction compact interaction-heart" data-action="heart"><img src="assets/miffy/米菲兔_4_小芋泥_来自小红书网页版.jpg" alt="米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手继续"><span>放出爱心</span></button><div class="heart-particles"></div></div></section>
+
+    <section class="screen trip theme-dalian" data-screen="11" data-media-page="12" data-place="大连"><div class="trip-head"><span class="eyebrow">OUR JOURNEY · 07</span><h2>我们一起去 <em>大连</em></h2><p>沿着海岸慢慢走，把北方的海也留进回忆。</p></div><div class="photo-stream"></div><div class="interaction compact interaction-highfive" data-action="highfive"><img src="assets/miffy/米菲兔_1_小芋泥_来自小红书网页版.jpg" alt="米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手继续"><span>击掌继续</span></button><i class="tap-ring"></i></div></section>
+
+    <section class="screen trip theme-changsha" data-screen="12" data-media-page="13" data-place="长沙"><div class="trip-head"><span class="eyebrow">OUR JOURNEY · 08</span><h2>我们一起去 <em>长沙</em></h2><p>热闹的街巷、好吃的晚餐，还有一起走到很晚的我们。</p></div><div class="photo-stream"></div><div class="interaction compact interaction-heart" data-action="heart"><img src="assets/miffy/米菲兔_3_小芋泥_来自小红书网页版.jpg" alt="米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手打开最后一页"><span>打开最后一页</span></button><div class="heart-particles"></div></div></section>
+
+    <section class="screen beauty theme-beauty" data-screen="beauty" data-media-page="14">
+      <div class="beauty-head"><span class="eyebrow">JUST LOOK AT YOU</span><h2>你真的是一个<br><em>很美的宝宝。</em></h2><p>每一张照片里的你，都值得被好好珍藏。</p></div>
+      <div class="beauty-gallery"><button id="prevBeauty" aria-label="上一张照片">‹</button><div class="beauty-photo"><span>美照 01</span><small>在 script.js 中替换照片地址</small></div><button id="nextBeauty" aria-label="下一张照片">›</button></div>
+      <div class="beauty-dots" id="beautyDots"></div>
+      <textarea class="beauty-note" id="beautyNote" aria-label="这张照片的文字" placeholder="写下你想对这张照片里的她说的话……"></textarea>
+      <div class="interaction compact interaction-heart" data-action="heart"><img src="assets/miffy/米菲兔_2_小芋泥_来自小红书网页版.jpg" alt="抱着爱心的米菲"><button class="hand-hotspot" data-next aria-label="点击米菲的小手进入最后一页"><span>去最后一页</span></button><div class="heart-particles"></div></div>
+    </section>
+
+    <section class="screen finale theme-final" data-screen="13" data-media-page="15">
+      <div class="final-head"><span class="eyebrow">THE LAST PAGE</span><h2>故事还没有结束，<br><em>我想和你继续写下去。</em></h2></div>
+      <div class="final-gallery"><button id="prevFinal" aria-label="上一张照片">‹</button><div class="final-photo"><span>大照片 01</span><small>在 script.js 中替换照片地址</small></div><button id="nextFinal" aria-label="下一张照片">›</button></div>
+      <div class="final-dots" id="finalDots"></div>
+      <textarea class="love-letter" aria-label="表白信" placeholder="在这里写下你的表白信……"></textarea>
+      <button class="restart-btn" id="restart">从头再看一遍</button>
+    </section>
+  </main>
+
+  <audio id="bgm" preload="metadata" src="audio/wo-ai-ni.mp3"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
