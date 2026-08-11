@@ -4,16 +4,52 @@ const passwordInput = document.getElementById('sitePassword');
 const passwordError = document.getElementById('passwordError');
 const passwordHash = '8626da287321d1eb3f0e398208e99367f3328781ca67dfa6493134b07bd96730';
 
-async function hashPassword(value) {
-  const bytes = new TextEncoder().encode(value);
-  const digest = await crypto.subtle.digest('SHA-256', bytes);
-  return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, '0')).join('');
+function sha256(value) {
+  const rightRotate = (number, amount) => number >>> amount | number << 32 - amount;
+  const words = [];
+  const ascii = unescape(encodeURIComponent(value));
+  const bitLength = ascii.length * 8;
+  const hash = sha256.initialHash || [];
+  const constants = sha256.constants || [];
+  let primeCounter = constants.length;
+  if (!primeCounter) {
+    const composites = {};
+    for (let candidate = 2; primeCounter < 64; candidate += 1) {
+      if (composites[candidate]) continue;
+      for (let multiple = candidate * candidate; multiple < 313; multiple += candidate) composites[multiple] = true;
+      hash[primeCounter] = Math.pow(candidate, .5) * 4294967296 | 0;
+      constants[primeCounter] = Math.pow(candidate, 1 / 3) * 4294967296 | 0;
+      primeCounter += 1;
+    }
+    sha256.initialHash = hash;
+    sha256.constants = constants;
+  }
+  let message = ascii + '\x80';
+  while (message.length % 64 !== 56) message += '\x00';
+  for (let index = 0; index < message.length; index += 1) words[index >> 2] |= message.charCodeAt(index) << (3 - index % 4) * 8;
+  words.push(bitLength / 4294967296 | 0, bitLength);
+  let currentHash = hash.slice(0, 8);
+  for (let block = 0; block < words.length; block += 16) {
+    const oldHash = currentHash.slice(0);
+    const schedule = words.slice(block, block + 16);
+    for (let round = 0; round < 64; round += 1) {
+      const w15 = schedule[round - 15];
+      const w2 = schedule[round - 2];
+      const a = currentHash[0];
+      const e = currentHash[4];
+      const word = round < 16 ? schedule[round] : schedule[round] = (schedule[round - 16] + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ w15 >>> 3) + schedule[round - 7] + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ w2 >>> 10)) | 0;
+      const temp = (currentHash[7] + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) + (e & currentHash[5] ^ ~e & currentHash[6]) + constants[round] + word) | 0;
+      currentHash = [(temp + ((rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) + (a & currentHash[1] ^ a & currentHash[2] ^ currentHash[1] & currentHash[2]))) | 0, a, currentHash[1], currentHash[2], (currentHash[3] + temp) | 0, e, currentHash[5], currentHash[6]];
+    }
+    for (let index = 0; index < 8; index += 1) currentHash[index] = currentHash[index] + oldHash[index] | 0;
+  }
+  return currentHash.map(word => (word >>> 0).toString(16).padStart(8, '0')).join('');
 }
 
 if (sessionStorage.getItem('fy-unlocked') === 'yes') passwordGate.classList.add('unlocked');
-passwordForm.addEventListener('submit', async event => {
+passwordForm.addEventListener('submit', event => {
   event.preventDefault();
-  if (await hashPassword(passwordInput.value) === passwordHash) {
+  if (sha256(passwordInput.value) === passwordHash) {
     sessionStorage.setItem('fy-unlocked', 'yes');
     passwordGate.classList.add('unlocked');
     passwordInput.value = '';
