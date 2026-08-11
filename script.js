@@ -305,7 +305,9 @@ const audio = document.getElementById('bgm');
 const musicButton = document.getElementById('musicBtn');
 const musicLabel = document.getElementById('musicLabel');
 const playlist = [
-  { src: 'audio/wo-ai-ni.mp3', title: '我爱你' }
+  { src: 'audio/xuyue.mp3', title: '嘘月' },
+  { src: 'audio/wo-ai-ni.mp3', title: '我爱你' },
+  { src: 'audio/april-encounter.mp3', title: '春日相遇' }
 ];
 let trackIndex = 0;
 
