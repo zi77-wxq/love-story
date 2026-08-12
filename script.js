@@ -333,6 +333,63 @@ async function loadPageMedia() {
 
 loadPageMedia();
 
+const editableSelectors = [
+  '.cover-copy h1', '.cover-copy p', '.cover-copy small',
+  '.copy-block h1', '.copy-block h2', '.copy-block p',
+  '.trip-head h2', '.trip-head p',
+  '.beauty-head h2', '.beauty-head p',
+  '.final-head h2'
+].join(',');
+
+function editableKey(element, index) {
+  const screen = element.closest('.screen');
+  return `fy-page-text-${screen?.dataset.screen || 'unknown'}-${index}`;
+}
+
+function initializeEditableText() {
+  document.querySelectorAll('.screen').forEach(screen => {
+    screen.querySelectorAll(editableSelectors).forEach((element, index) => {
+      const key = editableKey(element, index);
+      const saved = localStorage.getItem(key);
+      if (saved !== null) element.innerHTML = saved;
+      element.contentEditable = 'true';
+      element.spellcheck = false;
+      element.classList.add('editable-text');
+      element.setAttribute('aria-label', '可编辑文字');
+      element.addEventListener('input', () => localStorage.setItem(key, element.innerHTML));
+      element.addEventListener('paste', event => {
+        event.preventDefault();
+        document.execCommand('insertText', false, event.clipboardData.getData('text/plain'));
+      });
+    });
+  });
+}
+
+function exportEditedText() {
+  const pages = [...document.querySelectorAll('.screen')].map((screen, pageIndex) => ({
+    page: pageIndex + 1,
+    screen: screen.dataset.screen || '',
+    place: screen.dataset.place || '',
+    texts: [...screen.querySelectorAll('.editable-text')].map((element, index) => ({
+      index,
+      html: element.innerHTML,
+      text: element.innerText
+    })),
+    photoNotes: [...screen.querySelectorAll('.photo-note')].map(note => note.value),
+    beautyNote: screen.querySelector('.beauty-note')?.value || '',
+    loveLetter: screen.querySelector('.love-letter')?.value || ''
+  }));
+  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), pages }, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = '网站文字编辑稿.json';
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+initializeEditableText();
+document.getElementById('exportTextBtn').addEventListener('click', exportEditedText);
+
 const letter = document.querySelector('.love-letter');
 letter.value = localStorage.getItem('fy-love-letter') || '';
 letter.addEventListener('input', () => localStorage.setItem('fy-love-letter', letter.value));
