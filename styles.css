@@ -35,3 +35,8 @@ input.progress{appearance:none;-webkit-appearance:none;pointer-events:auto;flex:
 .password-panel input:focus{border-color:var(--red)}
 .password-panel button{width:100%;height:46px;margin-top:12px;border:2px solid #282522;background:#f3c743;cursor:pointer;box-shadow:4px 4px 0 #282522}
 .password-panel small{display:block;min-height:20px;margin-top:12px;color:#c73732}
+.final-gallery{width:min(1060px,100%)}
+.final-photo{aspect-ratio:3/2}
+.beauty-photo img,.beauty-photo video{width:100%;height:100%;object-fit:contain;background:#fffdf2}
+.final-photo img,.final-photo video{width:100%;height:100%;object-fit:contain;background:#fffdf2}
+@media(max-width:760px){.beauty-photo{aspect-ratio:auto;min-height:0}.beauty-photo img,.beauty-photo video{height:auto;max-height:none;object-fit:contain}.final-gallery{width:calc(100% + 20px);margin-left:-10px;margin-right:-10px;grid-template-columns:30px minmax(0,1fr) 30px}.final-photo{aspect-ratio:3/2}.final-photo img,.final-photo video{object-fit:contain}}

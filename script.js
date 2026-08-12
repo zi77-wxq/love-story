@@ -2,7 +2,7 @@ const passwordGate = document.getElementById('passwordGate');
 const passwordForm = document.getElementById('passwordForm');
 const passwordInput = document.getElementById('sitePassword');
 const passwordError = document.getElementById('passwordError');
-const passwordHash = '8626da287321d1eb3f0e398208e99367f3328781ca67dfa6493134b07bd96730';
+const passwordHash = 'bf5f609cbe892bde7d19dc274435c5792b07080db61efa02aee9ca058176e14a';
 
 function sha256(value) {
   const rightRotate = (number, amount) => number >>> amount | number << 32 - amount;
@@ -54,6 +54,7 @@ passwordForm.addEventListener('submit', event => {
     passwordGate.classList.add('unlocked');
     passwordInput.value = '';
     passwordError.textContent = '';
+    audio.play().catch(() => updateMusicButton());
   } else {
     passwordError.textContent = '密码不正确，请再试一次。';
     passwordInput.select();
@@ -358,8 +359,8 @@ function loadTrack(index, autoplay = false) {
 function updateMusicButton() {
   const playing = !audio.paused;
   musicButton.classList.toggle('playing', playing);
-  musicButton.setAttribute('aria-label', playing ? '暂停音乐' : '播放音乐');
-  musicLabel.textContent = playing ? '暂停音乐' : '播放音乐';
+  musicButton.setAttribute('aria-label', playing ? '暂停音乐' : '继续音乐');
+  musicLabel.textContent = playing ? '暂停' : '继续';
 }
 
 musicButton.addEventListener('click', async () => {
