@@ -143,11 +143,6 @@ progressBar.addEventListener('input', () => {
 });
 
 let pageMedia = {};
-let beautyPhotos = [];
-let beautyPhoto = 0;
-const beautyFrame = document.querySelector('.beauty-photo');
-const beautyDots = document.getElementById('beautyDots');
-const beautyNote = document.getElementById('beautyNote');
 
 function buildMedia(item, className = '') {
   const element = document.createElement(item.type.startsWith('video/') ? 'video' : 'img');
@@ -284,22 +279,6 @@ function renderChapterMedia(screen) {
   screen.insertBefore(gallery, screen.querySelector('.interaction'));
 }
 
-function saveBeautyNote() {
-  localStorage.setItem(`fy-beauty-note-${beautyPhoto}`, beautyNote.value);
-}
-
-function renderBeautyPhoto() {
-  if (!beautyPhotos.length) return;
-  beautyFrame.innerHTML = '';
-  beautyFrame.appendChild(buildMedia(beautyPhotos[beautyPhoto]));
-  beautyDots.innerHTML = beautyPhotos.map((_, i) => `<i class="${i === beautyPhoto ? 'active' : ''}"></i>`).join('');
-  beautyNote.value = localStorage.getItem(`fy-beauty-note-${beautyPhoto}`) || '';
-}
-
-beautyNote.addEventListener('input', saveBeautyNote);
-document.getElementById('prevBeauty').addEventListener('click', () => { if (!beautyPhotos.length) return; saveBeautyNote(); beautyPhoto = (beautyPhoto - 1 + beautyPhotos.length) % beautyPhotos.length; renderBeautyPhoto(); });
-document.getElementById('nextBeauty').addEventListener('click', () => { if (!beautyPhotos.length) return; saveBeautyNote(); beautyPhoto = (beautyPhoto + 1) % beautyPhotos.length; renderBeautyPhoto(); });
-
 let finalPhotos = [];
 let finalPhoto = 0;
 const finalFrame = document.querySelector('.final-photo');
@@ -322,9 +301,7 @@ async function loadPageMedia() {
     pageMedia = await response.json();
     document.querySelectorAll('.trip[data-media-page]').forEach(renderTripMedia);
     document.querySelectorAll('.story[data-media-page]').forEach(renderChapterMedia);
-    beautyPhotos = pageMedia['14'] || [];
     finalPhotos = pageMedia['15'] || [];
-    renderBeautyPhoto();
     renderFinalPhoto();
   } catch (error) {
     console.error(error);
@@ -337,7 +314,6 @@ const editableSelectors = [
   '.cover-copy h1', '.cover-copy p', '.cover-copy small',
   '.copy-block h1', '.copy-block h2', '.copy-block p',
   '.trip-head h2', '.trip-head p',
-  '.beauty-head h2', '.beauty-head p',
   '.final-head h2'
 ].join(',');
 
@@ -376,7 +352,6 @@ function exportEditedText() {
       text: element.innerText
     })),
     photoNotes: [...screen.querySelectorAll('.photo-note')].map(note => note.value),
-    beautyNote: screen.querySelector('.beauty-note')?.value || '',
     loveLetter: screen.querySelector('.love-letter')?.value || ''
   }));
   const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), pages }, null, 2)], { type: 'application/json' });
