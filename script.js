@@ -143,6 +143,7 @@ progressBar.addEventListener('input', () => {
 });
 
 let pageMedia = {};
+let publishedContent = { pages: [] };
 
 function buildMedia(item, className = '') {
   const element = document.createElement(item.type.startsWith('video/') ? 'video' : 'img');
@@ -159,8 +160,13 @@ function buildMedia(item, className = '') {
   return element;
 }
 
-function bindNote(note, key) {
-  note.value = localStorage.getItem(key) || '';
+function publishedPageForScreen(screen) {
+  return publishedContent.pages.find(page => String(page.screen) === String(screen?.dataset.screen));
+}
+
+function bindNote(note, key, publishedValue = '') {
+  const saved = localStorage.getItem(key);
+  note.value = saved === null ? publishedValue : saved;
   note.addEventListener('input', () => localStorage.setItem(key, note.value));
 }
 
@@ -251,6 +257,7 @@ function renderTripMedia(trip) {
   const allItems = pageMedia[page] || [];
   const items = page === '6' ? allItems.slice(1) : allItems;
   const stream = trip.querySelector('.photo-stream');
+  const publishedPage = publishedPageForScreen(trip);
   stream.innerHTML = '';
   items.forEach((item, index) => {
     const entry = document.createElement('article');
@@ -261,7 +268,7 @@ function renderTripMedia(trip) {
     const note = document.createElement('textarea');
     note.className = 'photo-note';
     note.placeholder = '写下这张照片或视频背后的故事……';
-    bindNote(note, `fy-note-page-${page}-${index}`);
+    bindNote(note, `fy-note-page-${page}-${index}`, publishedPage?.photoNotes?.[index] || '');
     entry.append(frame);
     if (page === '13' && index === 0) entry.append(createScratchCard());
     entry.append(note);
@@ -308,8 +315,6 @@ async function loadPageMedia() {
   }
 }
 
-loadPageMedia();
-
 const editableSelectors = [
   '.cover-copy h1', '.cover-copy p', '.cover-copy small',
   '.copy-block h1', '.copy-block h2', '.copy-block p',
@@ -324,9 +329,12 @@ function editableKey(element, index) {
 
 function initializeEditableText() {
   document.querySelectorAll('.screen').forEach(screen => {
+    const publishedPage = publishedPageForScreen(screen);
     screen.querySelectorAll(editableSelectors).forEach((element, index) => {
       const key = editableKey(element, index);
       const saved = localStorage.getItem(key);
+      const publishedValue = publishedPage?.texts?.[index]?.html;
+      if (publishedValue !== undefined) element.innerHTML = publishedValue;
       if (saved !== null) element.innerHTML = saved;
       element.contentEditable = 'true';
       element.spellcheck = false;
@@ -341,32 +349,9 @@ function initializeEditableText() {
   });
 }
 
-function exportEditedText() {
-  const pages = [...document.querySelectorAll('.screen')].map((screen, pageIndex) => ({
-    page: pageIndex + 1,
-    screen: screen.dataset.screen || '',
-    place: screen.dataset.place || '',
-    texts: [...screen.querySelectorAll('.editable-text')].map((element, index) => ({
-      index,
-      html: element.innerHTML,
-      text: element.innerText
-    })),
-    photoNotes: [...screen.querySelectorAll('.photo-note')].map(note => note.value),
-    loveLetter: screen.querySelector('.love-letter')?.value || ''
-  }));
-  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), pages }, null, 2)], { type: 'application/json' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = '网站文字编辑稿.json';
-  link.click();
-  URL.revokeObjectURL(link.href);
-}
-
-initializeEditableText();
-document.getElementById('exportTextBtn').addEventListener('click', exportEditedText);
-
 const letter = document.querySelector('.love-letter');
-letter.value = localStorage.getItem('fy-love-letter') || '';
+const savedLetter = localStorage.getItem('fy-love-letter');
+letter.value = savedLetter === null ? '' : savedLetter;
 letter.addEventListener('input', () => localStorage.setItem('fy-love-letter', letter.value));
 document.getElementById('restart').addEventListener('click', () => showScreen(0));
 
@@ -408,4 +393,19 @@ audio.addEventListener('pause', updateMusicButton);
 audio.addEventListener('ended', () => loadTrack(trackIndex + 1, true));
 loadTrack(0);
 updateMusicButton();
-showScreen(0);
+
+async function initializeSite() {
+  try {
+    const response = await fetch('published-content.json', { cache: 'no-store' });
+    if (response.ok) publishedContent = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+  initializeEditableText();
+  const finalPage = publishedPageForScreen(document.querySelector('.finale'));
+  if (savedLetter === null) letter.value = finalPage?.loveLetter || '';
+  await loadPageMedia();
+  showScreen(0);
+}
+
+initializeSite();

@@ -13,7 +13,7 @@ const mediaTypes = new Map([
 fs.rmSync(output, { recursive: true, force: true });
 fs.mkdirSync(output, { recursive: true });
 
-for (const file of ['index.html', 'script.js', 'styles.css', 'atmosphere.css', 'interactions.css', 'CNAME']) {
+for (const file of ['index.html', 'script.js', 'styles.css', 'atmosphere.css', 'interactions.css', 'published-content.json', 'CNAME']) {
   fs.copyFileSync(path.join(root, file), path.join(output, file));
 }
 for (const directory of ['assets', 'audio', 'media']) {
